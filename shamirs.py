@@ -41,7 +41,32 @@ def generate_shares(secret, threshold, shares):
 
     print(share_values)
 
-x = generate_shares(12, 5, 10)
+
+def byte_converter(string):
+
+    # Get ASCII values of the character
+
+    bytes_string = ''
+
+    for char in string:
+        ascii_char = ord(char)
+        bytes_char = str(format(ascii_char, '08b'))
+
+        bytes_string += str(bytes_char)
+
+    bit_length = len(bytes_string)
+
+    byte_decimal = 0
+
+
+    for bit in range(len(bytes_string)-1,-1,-1):
+        byte_decimal += int(bytes_string[-(bit+1)]) * 2 ** bit
+
+    return byte_decimal
+
+print(byte_converter('lucas'))
+
+# x = generate_shares(12, 5, 10)
 
 
 
