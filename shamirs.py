@@ -1,4 +1,5 @@
 import random
+import time
 from random import randrange, seed
 
 #TODO: Use security safe pseudo-RNG from module 'secrets'
@@ -42,7 +43,7 @@ def generate_shares(secret, threshold, shares):
     print(share_values)
 
 
-def byte_converter(string):
+def string_to_decimal(string):
 
     # Get ASCII values of the character
 
@@ -64,7 +65,38 @@ def byte_converter(string):
 
     return byte_decimal
 
-print(byte_converter('lucas'))
+# print(string_to_decimal('lucas'))
+
+#TODO: reverse big endian decimal to bytes -> string
+def decimal_to_string(decimal):
+    decimal_in_bits = []
+
+    remaining_decimal = decimal
+
+    while True:
+        if remaining_decimal >= 1:
+
+            remainder = remaining_decimal % 2
+            remaining_decimal = remaining_decimal//2
+
+            decimal_in_bits.insert(0, remainder)
+
+
+
+
+        else:
+            break
+
+    decimal_as_byte = ''
+
+    for bit in decimal_in_bits:
+        decimal_as_byte += str(bit)
+
+    return decimal_as_byte
+
+
+test = decimal_to_string(500000)
+print(test)
 
 # x = generate_shares(12, 5, 10)
 
