@@ -1,5 +1,6 @@
 import random
 import time
+from textwrap import wrap
 from random import randrange, seed
 
 #TODO: Use security safe pseudo-RNG from module 'secrets'
@@ -57,8 +58,6 @@ def string_to_decimal(string):
 
     bit_length = len(bytes_string)
 
-    print(bytes_string)
-
     byte_decimal = 0
 
 
@@ -99,12 +98,36 @@ def decimal_to_string(decimal):
     for bit in decimal_in_bits:
         decimal_as_byte += str(bit)
 
+    n_chars = int(len(decimal_as_byte)/8)
+
+    split_bytes = []
+
+    for char in range(0,n_chars):
+        char_bytes = ''
+        for bit in range(0,8):
+            string_bit = decimal_as_byte[0]
+            decimal_as_byte = decimal_as_byte[1:]
+            char_bytes += string_bit
 
 
-    return decimal_as_byte
+        split_bytes.append(char_bytes)
 
-test1 = string_to_decimal('lucas')
+        split_ascii = list(map(lambda byte: int(byte,2), split_bytes))
+
+        split_letters = list(map(lambda ascii_char: chr(ascii_char), split_ascii))
+
+        concat_letters = ''
+
+        for letter in split_letters:
+            concat_letters += letter
+
+
+    return concat_letters
+
+
+test1 = string_to_decimal('test!')
 print(test1)
+
 test = decimal_to_string(test1)
 print(test)
 
