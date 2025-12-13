@@ -5,7 +5,8 @@ I attempted to do this as much as possible by hand instead of relying on pre-bui
 in Python packages authored by others, relying only on a few key built-in packages that come<br>
 with Python 3 for unique functionalities which are hard to build myself (e.g. <code>random</code>).
 
-### 1. The idea
+## 1. The algorithm
+### 1.1 The idea
 The algorithm allows a secret ($S$) (e.g. a passphrase, a number) to be split into any number ($n$) <br>
 of components ($S_i$), where when a threshold number of shares ($t$) are brought together the secret <br>
 is revealed.<br>
@@ -14,7 +15,7 @@ It does not matter which shares are brought together to reach the threshold amou
 furthermore, no more information can be gained about the secret as the number of shares brought <br>
 together approaches $t$ (a characteristic called *perfect secrecry*).
 
-### 2. Mathematical principles
+### 1.2 Mathematical principles
 The algorithm exploits the fact that the equation for a polynomial of degree $k$ can be determined <br>
 with $k+1$ coordinates. For example, a first degree or linear polynomial can be <br>
 uniquely defined by two coordinates on the Cartesian plane. For example, the polynomial below passes through <br>
@@ -29,10 +30,22 @@ The basic idea is that the secret, when encoded as a number, is the y-intercept 
 The degree of the polynomial is your threshold $t-1$. So if $S = 5$ and $t = 3$, we create a polynomial<br>
 $y = a_1x^2 + a_2x + 5$ - a quadratic polynomial that requires three points to uniquely define.<br>
 The coefficients $a_1$ and $a_2$ are randomly chosen and determine the sign and magnitude or the parabola<br>
-and the horizontal shift, respectively.
+and the horizontal shift, respectively. This make it so that given less than $t$ shares, it is impossible to know <br>
+the exact function and thus the secret.<br>
+
+Once the polynomial is built, each shareholder is than given a point on it. For example, say the resulting<br>
+polynomial is $y = x^2 + 2x + 5$ and we want to distribute 4 shares (remember, at least three are needed
+so $n \geq t$ must be true). We can give each of the share holders a point in $x \in \{1,2,3,4\}$, so $(1,8)$, $(2,13)$, <br>
+$(3,20)$  and $(4,29)$.
 
 
-### 3. Security
+## 2. Implementation
+### 2.1 Big-Endian conversion 
+### 2.2 Successive division
+
+
+
+
 
 ### 4. Limitations
 
