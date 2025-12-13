@@ -38,6 +38,8 @@ polynomial is $y = x^2 + 2x + 5$ and we want to distribute 4 shares (remember, a
 so $n \geq t$ must be true). We can give each of the share holders a point in $x \in \{1,2,3,4\}$, so $(1,8)$, $(2,13)$, <br>
 $(3,20)$  and $(4,29)$.
 
+### 1.2 Finite field
+
 
 ## 2. Implementation details
 My implementation is simple programming of the logic explained above; but I think two subtle steps deserve explanation.<br>
@@ -52,13 +54,14 @@ are followed. If the secret is <code>'dog'</code> the string-as-binary value is<
 
 Finally, the binary string is interpreted in base-2. Which is done by multiplying each bit by $2$ to the power of its distance from the last bit.
 So, $0 \times 2^{23} + 1 \times 2^{22} + 1 \times 2^{21} + 0 \times 2^{20} + \dots + 1 \times 2^1 + 1 \times 2^0$.<br>
-Where $6582119$ is the Big Endian representation of <code>'dog'</code>.
+Resulting in $6582119$ as the Big Endian representation of <code>'dog'</code>.
 
 ### 2.2 Successive division
-Function <code>decimal_to_string</code> reverses this process through succesivly dividing by two and recording the remainder.
-Th
-
-
+Of course when decrypting the secret we must be able to go from decimal back to string. Function <code>decimal_to_string</code> 
+reverses the above-mentioned conversion process through succesively dividing by two and recording the remainder.
+This allows you to rebuild the concatenated binary number.<br>
+Next, we simply split the concatenated binary number into its 8-bit parts and we simply convert them back to ASCII and then
+to characters, rebuilding the string.
 
 
 ### 3. Limitations
