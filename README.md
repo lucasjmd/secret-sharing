@@ -6,16 +6,16 @@ in Python packages authored by others, relying only on a few key built-in packag
 with Python 3 for unique functionalities which are hard to build myself (e.g. <code>random</code>).
 
 ## 1. The algorithm
-### 1.1 The idea
+
 The algorithm allows a secret ($S$) (e.g. a passphrase, a number) to be split into any number ($n$) <br>
 of components ($S_i$), where when a threshold number of shares ($t$) are brought together the secret <br>
 is revealed.<br>
 <br>
 It does not matter which shares are brought together to reach the threshold amount if $t < n$, and <br>
-furthermore, no more information can be gained about the secret as the number of shares brought <br>
-together approaches $t$ (a characteristic called *perfect secrecry*).
+furthermore, no more information is gained about the secret as the number of shares brought <br>
+together approaches $t$ (a characteristic called *perfect secrecy*).
 
-### 1.2 Mathematical principles
+### 1.1 Polynomials
 The algorithm exploits the fact that the equation for a polynomial of degree $k$ can be determined <br>
 with $k+1$ coordinates. For example, a first degree or linear polynomial can be <br>
 uniquely defined by two coordinates on the Cartesian plane. For example, the polynomial below passes through <br>
@@ -39,17 +39,31 @@ so $n \geq t$ must be true). We can give each of the share holders a point in $x
 $(3,20)$  and $(4,29)$.
 
 
-## 2. Implementation
-### 2.1 Big-Endian conversion 
+## 2. Implementation details
+My implementation is simple programming of the logic explained above; but I think two subtle steps deserve explanation.<br>
+### 2.1 Big Endian conversion 
+The secret passed to the main <code>generate_shares</code> function can be any string (e.g. 'dog'). Secret Sharing <br>
+involves plotting the secret as the y-intercept on a Cartesian plane, which means it must be converted to a <br>
+unique and reversible number. Which is done in function <code>secret_to_decimal</code>. In this script we chose for Big-Endian conversion. <br>
+<br>
+Once each character of the string is converted to its ASCII value and then its 8-bit binary number,<br>
+next the 8-bit binary numbers are concatenated. According to Big Endian order, the order of the letters in the secret
+are followed. If the secret is <code>'dog'</code> the string-as-binary value is<code>011001000110111101100111</code>.<br>
+
+Finally, the binary string is interpreted in base-2. Which is done by multiplying each bit by $2$ to the power of its distance from the last bit.
+So, $0 \times 2^{23} + 1 \times 2^{22} + 1 \times 2^{21} + 0 \times 2^{20} + \dots + 1 \times 2^1 + 1 \times 2^0$.<br>
+Where $6582119$ is the Big Endian representation of <code>'dog'</code>.
+
 ### 2.2 Successive division
+Function <code>decimal_to_string</code> reverses this process through succesivly dividing by two and recording the remainder.
+Th
 
 
 
 
+### 3. Limitations
 
-### 4. Limitations
 
-polynomials
 
 ### Disclaimer
 
