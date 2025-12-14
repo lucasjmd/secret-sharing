@@ -64,7 +64,7 @@ this finite field). Every operation is run through this modulo function.<br>
 
 Since the numbers wrap around it is impossible to tell the original magnitudes of the secret and the noise. If the share is 
 $10$ it is impossible to know if it is $6+4$ or $6 + 16$ or $30 + 4$, all are equally likely. Additionally, we replace standard
-division ($\div a$) with modular inverse ($\times a^{-1} (\mathrm{mod}\;p)$), which forces integer only division.<br>
+division ($\div a$) with modular inverse ($\times a^{-1} (\mathrm{mod}\;p)$), which forces integer-only division.<br>
 
 To do this correctly we have to chose a $p$ which is a) prime and b) bigger than the secret can be (in its decimal form)
 , which forces us to restrict the size of the secret. I chose a 256-bit prime number which gives a huge search space which
