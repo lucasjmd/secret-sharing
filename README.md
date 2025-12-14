@@ -30,7 +30,8 @@ The basic idea is that the secret, when encoded as a number, is the y-intercept 
 The degree of the polynomial is your threshold $t-1$. So if $S = 5$ and $t = 3$, we create a polynomial<br>
 $y = a_1x^2 + a_2x + 5$ - a quadratic polynomial that requires three points to uniquely define.<br>
 The coefficients $a_1$ and $a_2$ are randomly chosen and determine the sign and magnitude or the parabola<br>
-and the horizontal shift, respectively. This make it so that given less than $t$ shares, it is impossible to know <br>
+and the horizontal shift, respectively. This represents the 'noise' that makes the polynomial swing and vary wildly and obscures the secret.
+This make it so that given less than $t$ shares, it is impossible to know <br>
 the exact function and thus the secret.<br>
 
 Once the polynomial is built, each shareholder is than given a point on it. For example, say the resulting<br>
@@ -39,7 +40,24 @@ so $n \geq t$ must be true). We can give each of the share holders a point in $x
 $(3,20)$  and $(4,29)$.
 
 ### 1.2 Finite field
+This algorithm presents two major flaws:<br>
+1. <b>Information leak</b><br>If the secret is a large number (i.e. a longer passphrase) the attacker can compare their share value to range the
+random noise is sampled from. If the noise is significantly smaller, the secret's magnitude is exposed.<br>
+<br>For example, if $S = 1,234,567,890,120,000$ and two coefficients are sampled from $[-10^9, 10^9]$
+the noise is very limited compared to the secret and the attacker can narrow down the possible secrets to a range of four
+billion potential numbers.<br>
 
+
+2. <b>Numerical instability</b><br>
+When a large amount of shares or shares with relatively high x coordinates are used, the resulting y-coordinate becomes
+exponentially large (e.g. moving very far to the right on a parabola). To go from the combined shares to the polynomial
+or the directly to the y-intercept via Lagrange interpolation requires division. If the share x coordinates force a division
+by a non-factor, Python switches to floating-point math which, when dealing with numbers that exceed the bit-size representation
+(e.g. recurring numbers), can cause precision errors in the less significant digits. This means that the secret can fail
+to be reconstructed.
+
+Both these flaws are elegantly addressed by switching from a infitine field (the infinite number lines of the axes on a 
+Cartesian plane) to a finite field that wraps around.
 
 ## 2. Implementation details
 My implementation is simple programming of the logic explained above; but I think two subtle steps deserve explanation.<br>
@@ -64,10 +82,13 @@ Next, we simply split the concatenated binary number into its 8-bit parts and we
 to characters, rebuilding the string.
 
 
-### Sources and further reading
-https://en.wikipedia.org/wiki/Shamir's_secret_sharing<br>
-https://en.wikipedia.org/wiki/Endianness<br>
-https://en.wikipedia.org/wiki/Finite_field_arithmetic<br>
-https://en.wikipedia.org/wiki/Modular_arithmetic<br>
+### Relevant materials
+#### Wikipedia articles
+[Shamir's Secret Sharing](https://en.wikipedia.org/wiki/Shamir's_secret_sharing)<br>
+[Endianness](https://en.wikipedia.org/wiki/Endianness)<br>
+[Modular arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic)<br>
+
+#### YouTube videos
+[Floating Point Numbers by Computerphile](https://www.youtube.com/watch?v=PZRI1IfStY0)<br>
 
 
