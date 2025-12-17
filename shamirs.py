@@ -24,6 +24,22 @@ def generate_shares(secret: str, threshold: int, shares: int) -> list:
     :return: A list of tuples with the location of the shares on a Cartesian coordinate system
     """
 
+    if isinstance(threshold, int):
+        if threshold <= 0:
+            raise ValueError('Threshold must be atleast 1.')
+
+        if threshold > shares:
+            raise ValueError('Threshold must be smaller or equal to the share number.')
+
+    else:
+        raise ValueError('Threshold must be of type int.')
+
+    if isinstance(shares, int):
+        if shares <= 0:
+            raise ValueError('Share number must be atleast 1.')
+
+    else:
+        raise ValueError('Secret must be of type int.')
 
 
     # Initialises the coordinate of the secret (always at the y-intercept)
@@ -51,8 +67,6 @@ def generate_shares(secret: str, threshold: int, shares: int) -> list:
 
         share_values.append(tuple(share_value))
 
-    print(share_values)
-
     return share_values
 
 
@@ -67,6 +81,13 @@ def secret_to_decimal(secret_as_string: str) -> int:
 
     # Each character in the secret string is converted to its ascii character
     # And then to its 8-bit value
+
+
+    if isinstance(secret_as_string,str):
+        if len(secret_as_string) == 0:
+            raise ValueError('Please enter at least one character as the secret!')
+    else:
+        raise ValueError('Secret must be a string.')
 
     bytes_string = ''
 
@@ -167,20 +188,22 @@ def shamirs(secret: str, threshold: int, shares: int) -> list:
     if secret_in_decimal > p:
         raise ValueError('Your secret is too complex.')
 
-    print(secret_in_decimal)
-
     shares = generate_shares(secret_in_decimal, threshold, shares)
 
     return shares
 
 # def reconstruct_secret()
 
+test = shamirs('3', 2, 3)
 
-input_secret    = input("Please enter the passphrase you want to encrypt: ")
-input_shares_no = input("How many people do you want to give shares to?: ")
-input_threshold = input("At a minimum, how many shares need to come together to decrypt the secret?: ")
+print(test)
 
-shares_output = shamirs(input_secret, input_threshold, input_shares_no)
+
+# input_secret    = input("Please enter the passphrase you want to encrypt: ")
+# input_shares_no = input("How many people do you want to give shares to?: ")
+# input_threshold = input("At a minimum, how many shares need to come together to decrypt the secret?: ")
+#
+# shares_output = shamirs(input_secret, input_threshold, input_shares_no)
 
 
 
