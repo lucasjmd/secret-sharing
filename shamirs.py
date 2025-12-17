@@ -3,8 +3,9 @@ from textwrap import wrap
 from random import randrange, seed
 
 #TODO: Use security safe pseudo-RNG from module 'secrets'
-#TODO: Implement finite field modulo a prime for enhanced security and numerical stability
-#TODO: Make shares customisable
+#TODO: Make secrets reversible
+#TODO: Add input feature
+#TODO: Cleanup code
 
 NIST_P256_HEX = 'FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF'
 p = int(NIST_P256_HEX,16)
@@ -22,6 +23,8 @@ def generate_shares(secret: str, threshold: int, shares: int) -> list:
     :param shares: This is the number of shares you intend to distribute.
     :return: A list of tuples with the location of the shares on a Cartesian coordinate system
     """
+
+
 
     # Initialises the coordinate of the secret (always at the y-intercept)
     secret_coord = tuple([0,secret])
@@ -170,8 +173,18 @@ def shamirs(secret: str, threshold: int, shares: int) -> list:
 
     return shares
 
+# def reconstruct_secret()
 
-test = shamirs('lucas', 3, 5)
+
+input_secret    = input("Please enter the passphrase you want to encrypt: ")
+input_shares_no = input("How many people do you want to give shares to?: ")
+input_threshold = input("At a minimum, how many shares need to come together to decrypt the secret?: ")
+
+shares_output = shamirs(input_secret, input_threshold, input_shares_no)
+
+
+
+
 
 
 
