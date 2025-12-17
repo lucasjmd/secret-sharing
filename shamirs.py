@@ -1,4 +1,5 @@
 import random
+import os
 from textwrap import wrap
 from random import randrange, seed
 
@@ -14,6 +15,17 @@ p = int(NIST_P256_HEX,16)
 
 random.seed()
 
+def program_ender():
+    print(30 * '#')
+    program_open = True
+    while program_open:
+        input_close = input("Press 'q' to close the program...")
+
+        if input_close == 'q':
+            program_open = False
+        else:
+            print('\n')
+
 def generate_shares(secret: str, threshold: int, shares: int) -> list:
     """
     This function simple coordinate shares to unlock an integer secret at a threshold number of shares.
@@ -26,21 +38,42 @@ def generate_shares(secret: str, threshold: int, shares: int) -> list:
 
     if isinstance(threshold, int):
         if threshold <= 0:
-            raise ValueError('Threshold must be atleast 1.')
+            try:
+                raise ValueError('Threshold must be atleast 1.')
+            except ValueError as e:
+                print(f'Error: {e}')
+                program_ender()
+
 
         if threshold > shares:
-            raise ValueError('Threshold must be smaller or equal to the share number.')
+            try:
+                raise ValueError('Threshold must be smaller or equal to the share number.')
+            except ValueError as e:
+                print(f'Error: {e}')
+                program_ender()
+
 
     else:
-        raise ValueError('Threshold must be of type int.')
+        try:
+            raise ValueError('Threshold must be of type int.')
+        except ValueError as e:
+            print(f'Error: {e}')
+            program_ender()
 
     if isinstance(shares, int):
         if shares <= 0:
-            raise ValueError('Share number must be atleast 1.')
+            try:
+                raise ValueError('Share number must be atleast 1.')
+            except ValueError as e:
+                print(f'Error: {e}')
+                program_ender()
 
     else:
-        raise ValueError('Secret must be of type int.')
-
+        try:
+            raise ValueError('Secret must be of type int.')
+        except ValueError as e:
+            print(f'Error: {e}')
+            program_ender()
 
     # Initialises the coordinate of the secret (always at the y-intercept)
     secret_coord = tuple([0,secret])
@@ -85,9 +118,18 @@ def secret_to_decimal(secret_as_string: str) -> int:
 
     if isinstance(secret_as_string,str):
         if len(secret_as_string) == 0:
-            raise ValueError('Please enter at least one character as the secret!')
+            try:
+                raise ValueError('Please enter at least one character as the secret!')
+            except ValueError as e:
+                print(f'Error: {e}')
+                program_ender()
+
     else:
-        raise ValueError('Secret must be a string.')
+        try:
+            raise ValueError('Secret must be a string.')
+        except ValueError as e:
+            print(f'Error: {e}')
+            program_ender()
 
     bytes_string = ''
 
@@ -186,14 +228,17 @@ def shamirs(secret: str, threshold: int, shares: int) -> list:
 
     secret_in_decimal = secret_to_decimal(secret)
     if secret_in_decimal > p:
-        raise ValueError('Your secret is too complex.')
+        try:
+            raise ValueError('Your secret is too complex.')
+        except ValueError as e:
+            print(f'Error: {e}')
+            program_ender()
 
     shares = generate_shares(secret_in_decimal, threshold, shares)
 
     return shares
 
 # def reconstruct_secret()
-
 
 input_secret    = str(input("Please enter the passphrase you want to encrypt: "))
 input_shares_no = int(input("How many people do you want to give shares to?: "))
@@ -204,6 +249,11 @@ shares_output = shamirs(input_secret, input_threshold, input_shares_no)
 print('These are the shares to distribute among your shareholders:')
 for share in shares_output:
     print(f'{share} \n')
+
+program_ender()
+
+
+
 
 
 
