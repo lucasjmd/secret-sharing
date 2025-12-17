@@ -194,16 +194,17 @@ def shamirs(secret: str, threshold: int, shares: int) -> list:
 
 # def reconstruct_secret()
 
-test = shamirs('3', 2, 3)
 
-print(test)
+input_secret    = str(input("Please enter the passphrase you want to encrypt: "))
+input_shares_no = int(input("How many people do you want to give shares to?: "))
+input_threshold = int(input("At a minimum, how many shares need to come together to decrypt the secret?: "))
 
+shares_output = shamirs(input_secret, input_threshold, input_shares_no)
 
-# input_secret    = input("Please enter the passphrase you want to encrypt: ")
-# input_shares_no = input("How many people do you want to give shares to?: ")
-# input_threshold = input("At a minimum, how many shares need to come together to decrypt the secret?: ")
-#
-# shares_output = shamirs(input_secret, input_threshold, input_shares_no)
+print('These are the shares to distribute among your shareholders:')
+for share in shares_output:
+    print(f'{share} \n')
+
 
 
 
