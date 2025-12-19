@@ -242,8 +242,17 @@ def shamirs(secret: str, threshold: int, shares: int) -> list:
 # def reconstruct_secret()
 
 input_secret    = str(input("Please enter the passphrase you want to encrypt: "))
-input_shares_no = int(input("How many people do you want to give shares to?: "))
-input_threshold = int(input("At a minimum, how many shares need to come together to decrypt the secret?: "))
+try:
+    input_shares_no = int(input("How many people do you want to give shares to?: "))
+except ValueError as e:
+    print('Error! Please pass an integer.')
+    program_ender()
+
+try:
+    input_threshold = int(input("At a minimum, how many shares need to come together to decrypt the secret?: "))
+except ValueError as e:
+    print('Error! Please pass an integer.')
+    program_ender()
 
 shares_output = shamirs(input_secret, input_threshold, input_shares_no)
 
